@@ -1,0 +1,17 @@
+# LISTA COM ANOMESES AUTOMÁTIZADA:
+
+data_inic = datetime.datetime(2019, 1, 1) 
+data_atual = datetime.date.today()
+# número de meses até hoje:
+num_mes = (data_atual.year - data_inic.year) * 12 + (data_atual.month - data_inic.month)
+
+# lista que receberá nomes dos arquivos para cada mês até hoje:
+lista_recursos_anomeses = list()
+
+# Cria nome do arquivo e armazena na lista:
+for i in range(num_mes):
+  a_date = datetime.datetime.strptime("2019-01-01", "%Y-%m-%d")
+  a_month = dateutil.relativedelta.relativedelta(months = i)
+  # Adiciona 1 mês a data:
+  date_plus_month = a_date + a_month
+  lista_recursos_anomeses.append(str(date_plus_month)[0:7].replace('-','') + '_RecebimentosRecursosPorFavorecido.csv')
