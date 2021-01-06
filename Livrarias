@@ -1,0 +1,14 @@
+# Para criar lista com anomeses na célula 2:
+import datetime 
+from datetime import date
+import dateutil
+
+# Para baixar arquivos:
+import requests 
+import time
+
+# Para unzipar recursos governo baixado:
+from zipfile import ZipFile
+
+# Para unzipar covid-19 baixado:
+import gzip 
