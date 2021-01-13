@@ -35,10 +35,6 @@ for (i in 1:num_mes){
 
 # COMMAND ----------
 
-lista_nome_arquivos_recursos[1]
-
-# COMMAND ----------
-
 # DBTITLE 1,Base Recursos_Governo_Full
 # inicia uma lista vazia que conterá as bases geradas no loop abaixo
 lista_bases_recursos <- list()
@@ -55,6 +51,9 @@ for (i in 1:length(lista_nome_arquivos_recursos)) {
   # Renomeia colunas
   names(recurso_bruto) <- c('UF','Orgao_Superior','Orgao','Ano_Mes','Valor_Recebido') 
    
+  # Exclui Distrito Federal:
+  recurso_bruto <- filter(recurso_bruto, UF != "DF")
+  
   # Cria tabela sumário para cada arquivo da lista.
   recursos_mes <- recurso_bruto %>%
      group_by(UF, Orgao, Ano_Mes) %>%
@@ -97,6 +96,9 @@ covid_inicial$date <- str_replace_all(covid_inicial$date, '-', '/')
 # Formata como date:
 covid_inicial$date <- as.Date(covid_inicial$date, format = "%Y/%m/%d")
 
+# Considera valores do Distrito Federal (DF) como de Goias (GO):
+covid_inicial$state[covid_inicial$state == "DF"] <- "GO"
+
 # Cria base sumarizada:
 Covid_final <- covid_inicial %>%
    group_by(date, state) %>%
@@ -133,7 +135,7 @@ pop.estados <- covid_inicial %>%
 
 # Vetor Com Estados:
 Estado <- c('Acre','Alagoas','Amazonas','Amapa','Bahia','Ceara',
-             'Distrito Federal','Espirito Santo','Goias','Maranhao',
+             'Espirito Santo','Goias','Maranhao',
              'Minas Gerais','Mato Grosso do Sul','Mato Grosso',
              'Para','Paraiba','Pernambuco','Piaui','Parana',
              'Rio de Janeiro','Rio Grande do Norte','Rondonia',
@@ -142,7 +144,7 @@ Estado <- c('Acre','Alagoas','Amazonas','Amapa','Bahia','Ceara',
 
 # Vetor com Regioes:
 Regiao <- c('Norte','Nordeste','Norte','Norte','Nordeste','Nordeste',
-            'Centro-Oeste','Sudeste','Centro-Oeste','Nordeste',
+            'Sudeste','Centro-Oeste','Nordeste',
             'Sudeste','Centro-Oeste','Centro-Oeste',
             'Norte','Nordeste','Nordeste','Nordeste','Sul',
             'Sudeste','Nordeste','Norte',
@@ -175,4 +177,4 @@ try(write.csv(pop.estados, '/dbfs/FileStore/tables/base_final/Pop.estados.csv'),
 # COMMAND ----------
 
 # DBTITLE 1,Inicia próximo notebook
-# MAGIC %run /Users/igor.bernat@blueshift.com.br/3_Cria_Tabela
+# MAGIC %run /Users/heitor.santos@blueshift.com.br/3_Cria_Tabela
